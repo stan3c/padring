@@ -42,7 +42,7 @@ public:
         m_ltype(ltype),
         m_size(-1),
         m_x(-1.0), m_y(-1.0),
-        m_flipped(false)
+        m_flipped(false),m_offset(0.0)
     {        
     }
 
@@ -54,6 +54,7 @@ public:
     std::string m_cellname; ///< cell name
     std::string m_location; ///< location of cell
     double      m_size;     ///< size of the item (-1 if unknown)
+    double      m_offset;   ///< offset of the item (0 by default)
     double      m_x;        ///< x-position of item (-1 if unknown)
     double      m_y;        ///< y-position of item (-1 if unknown)
     bool        m_flipped;  ///< when true, unplaced/unrotated cell is filled along y axis.
@@ -95,7 +96,7 @@ public:
 
         m_items.push_back(item);
         
-        if (item->m_ltype == LayoutItem::TYPE_CELL)
+        if (item->m_ltype == LayoutItem::TYPE_CELL || item->m_ltype == LayoutItem::TYPE_BOND)
         {
             // auto-insert a flex space the next time
             // a regular CELL is inserted.

@@ -105,7 +105,8 @@ public:
     virtual void onBond(
         const std::string &instance,
         const std::string &cellname,
-        bool flipped)
+        bool flipped,
+        double gd)
     {
         std::cout << "BOND " << instance << " " << cellname << "\n";
     }

@@ -42,7 +42,8 @@ double Layout::getMinSize() const
     double total = 0.0;
     for(auto item : m_items)
     {
-        if (item->m_size >= 0)
+        if (item->m_size >= 0 && 
+            item->m_ltype != LayoutItem::TYPE_BOND) // do not take in consideration the bonds
         {
             total += item->m_size;
         }
@@ -81,7 +82,7 @@ void Layout::prepareForLayout()
 
     // check if last item is a CELL
     // if so, insert a FLEXSPACER
-    if (m_items.back()->m_ltype == LayoutItem::TYPE_CELL)
+    if (m_items.back()->m_ltype == LayoutItem::TYPE_CELL || m_items.back()->m_ltype == LayoutItem::TYPE_BOND)
     {
         LayoutItem *item = new LayoutItem(LayoutItem::TYPE_FLEXSPACE);
         item->m_size = -1;
@@ -130,9 +131,12 @@ bool Layout::doLayout()
     double grid = 1.0;
     double newPos;
     double error = 0.0;
+    LayoutItem* last_cell = nullptr;
+    double last_bond = 0.0;
     for(auto item : m_items)
     {
         setItemPos(item, pos);
+        doLog(LOG_INFO,"Processing cell %s inst %s\n", item->m_instance.c_str(), item->m_cellname.c_str());
 
         // advance the position depending on the type of
         // item
@@ -146,7 +150,17 @@ bool Layout::doLayout()
             error += (meanFlexSpaceSize - item->m_size);
             break;
         case LayoutItem::TYPE_CELL:
+            last_cell = item;
             pos += item->m_size;
+            last_bond = 0.0;
+            break;
+        case LayoutItem::TYPE_BOND:
+            // Only in this special case, assign the last item's position
+            if(last_cell != nullptr) {
+                item->m_x = last_cell->m_x + ( m_dir == DIR_HORIZONTAL ? (last_bond + item->m_offset) : 0.0 ) ;
+                item->m_y = last_cell->m_y + ( m_dir == DIR_HORIZONTAL ? 0.0 : (last_bond + item->m_offset) ) ;
+                last_bond += item->m_size + item->m_offset;
+            }
             break;
         case LayoutItem::TYPE_CORNER:
             pos += item->m_size;

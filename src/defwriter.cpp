@@ -102,7 +102,9 @@ void DEFWriter::writeCell(const LayoutItem *item)
         y -= item->m_lefinfo->m_sx;
         toDEFCoordinates(x,y);
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
-        m_ss << "E ;\n";
+        m_ss << "E";
+        if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
+        m_ss << " ;\n";
     }
     else if (item->m_location == "SE")
     {
@@ -110,35 +112,42 @@ void DEFWriter::writeCell(const LayoutItem *item)
         //x += item->m_lefinfo->m_sy;
         toDEFCoordinates(x,y);
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
-        m_ss << "W ;\n";
+        m_ss << "W";
+        if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
+        m_ss << " ;\n";
     }
     else if (item->m_location == "NE")
     {
         y -= item->m_lefinfo->m_sy;
         toDEFCoordinates(x,y);
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
-        m_ss << "S ;\n";
+        m_ss << "S";
+        if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
+        m_ss << " ;\n";
     }
     else if (item->m_location == "SW")
     {
         toDEFCoordinates(x,y);
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
-        m_ss << "N ;\n";
+        m_ss << "N";
+        if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
+        m_ss << " ;\n";
     }
     else if (item->m_location == "E")
     {
         x -= item->m_lefinfo->m_sy;
         toDEFCoordinates(x,y);
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
-
         if (!item->m_flipped) 
         {
-            m_ss << " W" << " ;\n";
+            m_ss << " W";
         }
         else
         {
-            m_ss << " FE" << " ;\n";
+            m_ss << " FE";
         }
+        if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
+        m_ss << " ;\n";
     }
     else if (item->m_location == "N")
     {
@@ -147,12 +156,14 @@ void DEFWriter::writeCell(const LayoutItem *item)
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
         if (!item->m_flipped) 
         {
-            m_ss << " S" << " ;\n";
+            m_ss << " S";
         }
         else
         {
-            m_ss << " FS" << " ;\n";
+            m_ss << " FS";
         }
+        if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
+        m_ss << " ;\n";
     }   
     else if (item->m_location == "S")
     {
@@ -161,12 +172,14 @@ void DEFWriter::writeCell(const LayoutItem *item)
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
         if (!item->m_flipped)
         {
-            m_ss << " N" << " ;\n";
+            m_ss << " N";
         }
         else
         {
-            m_ss << " FN" << " ;\n";
+            m_ss << " FN";
         }
+        if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
+        m_ss << " ;\n";
     }        
     else
     {
@@ -174,11 +187,13 @@ void DEFWriter::writeCell(const LayoutItem *item)
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
         if (!item->m_flipped) 
         {
-            m_ss << " E" << " ;\n";
+            m_ss << " E";
         }
         else
         {
-            m_ss << " W" << " ;\n";
+            m_ss << " W";
         }
+        if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
+        m_ss << " ;\n";
     }
 }

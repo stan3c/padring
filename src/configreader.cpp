@@ -349,6 +349,8 @@ bool ConfigReader::parseBond()
     std::string tokstr;
     std::string instance;
     std::string cellname;
+    std::string g;
+    double gd = 0.0;
     bool flipped = false;
 
     // instance name
@@ -373,9 +375,23 @@ bool ConfigReader::parseBond()
         error("Expected a cell name\n");
         return false;
     }
+    
+    // Optional offset
+    tok = tokenize(g);
+    if (tok == TOK_NUMBER) {
+        try
+        {
+            gd = std::stod(g);
+        }
+        catch(const std::invalid_argument& ia)
+        {
+            error(ia.what());
+            return false;
+        }
+        tok = tokenize(tokstr);
+    }
 
     // expect semicol
-    tok = tokenize(tokstr);
     if (tok != TOK_SEMICOL)
     {
         error("Expected ;\n");
@@ -383,7 +399,7 @@ bool ConfigReader::parseBond()
     }
 
     m_padCount++;
-    onBond(instance,cellname,flipped);
+    onBond(instance,cellname,flipped,gd);
 
     return true;
 }

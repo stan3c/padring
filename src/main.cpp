@@ -245,6 +245,12 @@ int main(int argc, char *argv[])
             svg.writeCell(item);
             def.writeCell(item);
         }
+        else if (item->m_ltype == LayoutItem::TYPE_BOND)
+        {
+            if (writer != nullptr) writer->writeCell(item);
+            svg.writeCell(item);
+            def.writeCell(item);
+        }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
             // do fillers
@@ -286,6 +292,12 @@ int main(int argc, char *argv[])
             if (writer != nullptr) writer->writeCell(item);
             svg.writeCell(item);  
             def.writeCell(item);          
+        }
+        else if (item->m_ltype == LayoutItem::TYPE_BOND)
+        {
+            if (writer != nullptr) writer->writeCell(item);
+            svg.writeCell(item);
+            def.writeCell(item);
         }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
@@ -329,6 +341,12 @@ int main(int argc, char *argv[])
             svg.writeCell(item);
             def.writeCell(item);
         }
+        else if (item->m_ltype == LayoutItem::TYPE_BOND)
+        {
+            if (writer != nullptr) writer->writeCell(item);
+            svg.writeCell(item);
+            def.writeCell(item);
+        }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
             // do fillers
@@ -366,6 +384,12 @@ int main(int argc, char *argv[])
     for(auto item : padring.m_east)
     {
         if (item->m_ltype == LayoutItem::TYPE_CELL)
+        {
+            if (writer != nullptr) writer->writeCell(item);
+            svg.writeCell(item);
+            def.writeCell(item);
+        }
+        else if (item->m_ltype == LayoutItem::TYPE_BOND)
         {
             if (writer != nullptr) writer->writeCell(item);
             svg.writeCell(item);

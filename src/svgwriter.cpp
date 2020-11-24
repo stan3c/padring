@@ -155,6 +155,10 @@ void SVGWriter::writeCell(const LayoutItem *item)
     {
         m_svg << "style=\"fill:#BFE1F3;stroke:#179AA9;stroke-width:0.25\" />\n";
     }
+    else if (item->m_ltype == LayoutItem::TYPE_BOND)
+    {
+        m_svg << "style=\"fill:#66fc03;stroke:#000000;stroke-width:0.75\" />\n";
+    }
     else
     {
         m_svg << "style=\"fill:#FAAD35;stroke:#F25844;stroke-width:0.5\" />\n";

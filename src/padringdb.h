@@ -143,11 +143,12 @@ public:
         m_lastLocation = location;
     }
 
-    /** callback for a pad */
+    /** callback for a bond */
     virtual void onBond(
         const std::string &instance,
         const std::string &cellname,
-        bool flipped) override
+        bool flipped,
+        double gd) override
     {
         PRLEFReader::LEFCellInfo_t *cell = m_lefreader.getCellByName(cellname);
         if (cell == nullptr)
@@ -155,6 +156,7 @@ public:
             doLog(LOG_ERROR,"Cannot find cell %s in the LEF database\n", cellname.c_str());
             return;
         }
+        doLog(LOG_INFO,"Added a bond in loc %s cell %s inst %s\n", m_lastLocation.c_str(), instance.c_str(), cellname.c_str());
 
         LayoutItem *item = new LayoutItem(LayoutItem::TYPE_BOND);
         item->m_instance = instance;
@@ -163,9 +165,8 @@ public:
         item->m_size = cell->m_sx;
         item->m_lefinfo = cell;
         item->m_flipped = flipped;
+        item->m_offset = gd;
 
-        // Corner cells should be symmetrical
-        // i.e. width = height.
         if (m_lastLocation == "N")
         {
             m_north.addItem(item);
