@@ -211,9 +211,10 @@ public:
     }
 
     /** callback for filler cell prefix string */
-    virtual void onFiller(const std::string &filler) override
+    virtual void onFiller(const std::list<std::string> &fillers) override
     {
-        m_fillerPrefix = filler;
+        m_fillers.clear();
+        m_fillers.assign(fillers.begin(), fillers.end());
     }
 
     /** callback for space in microns */
@@ -270,7 +271,7 @@ public:
 
     std::string m_designName;
 
-    std::string m_fillerPrefix;
+    std::list<std::string> m_fillers;
     std::string m_lastLocation;
 
     PRLEFReader m_lefreader;

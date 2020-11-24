@@ -620,25 +620,19 @@ bool ConfigReader::parseFiller()
 {
     // FILLER: fillername
     std::string tokstr;
-    std::string fillerName;
+    std::list<std::string> fillers;
 
     // fillername
-    ConfigReader::token_t tok = tokenize(fillerName);
-    if (tok != TOK_IDENT)
+    ConfigReader::token_t tok = tokenize(tokstr);
+
+    // expect semicol at the end
+    while (tok != TOK_SEMICOL)
     {
-        error("Expected a filler cell prefix\n");
-        return false;
+        fillers.push_back(tokstr);
+        tok = tokenize(tokstr);
     }
 
-    // expect semicol
-    tok = tokenize(tokstr);
-    if (tok != TOK_SEMICOL)
-    {
-        error("Expected ;\n");
-        return false;
-    }
-
-    onFiller(fillerName);
+    onFiller(fillers);
     return true;
 }
 

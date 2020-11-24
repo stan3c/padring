@@ -124,9 +124,9 @@ public:
     }
 
     /** callback for grid spacing in microns */
-    virtual void onFiller(const std::string &fillerName)
+    virtual void onFiller(const std::list<std::string> &fillers)
     {
-        std::cout << "Filler prefix:" << fillerName << "\n";
+        std::cout << "Filler prefix:" << fillers.size() << "\n";
     }
 
     /** callback for space in microns */

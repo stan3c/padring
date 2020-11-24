@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     // if an explicit filler cell prefix was not given,
     // search the cell database for filler cells
     FillerHandler fillerHandler;
-    if (cmdresult.count("filler") == 0)
+    if (padring.m_fillers.size() == 0)
     {
         for(auto lefCell : padring.m_lefreader.m_cells)
         {
@@ -141,12 +141,21 @@ int main(int argc, char *argv[])
     else
     {
         // use the provided filler cell prefix to search for filler cells
-        for(auto lefCell : padring.m_lefreader.m_cells)
+        for(auto namefill : padring.m_fillers) 
         {
-            // match prefix
-            if (lefCell.first.rfind(padring.m_fillerPrefix, 0) == 0) 
+            // match any of the fillers
+            bool found = false;
+            for(auto lefCell : padring.m_lefreader.m_cells)
             {
-                fillerHandler.addFillerCell(lefCell.first, lefCell.second->m_sx);
+                if (lefCell.first.compare(namefill) == 0) 
+                {
+                    found = true;
+                    fillerHandler.addFillerCell(lefCell.first, lefCell.second->m_sx);
+                    break;
+                }
+            }
+            if(!found) {
+                doLog(LOG_ERROR, "Filler cell %s not found\n", namefill);
             }
         }
     }
