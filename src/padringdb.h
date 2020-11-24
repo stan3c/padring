@@ -143,6 +143,51 @@ public:
         m_lastLocation = location;
     }
 
+    /** callback for a pad */
+    virtual void onBond(
+        const std::string &instance,
+        const std::string &cellname,
+        bool flipped) override
+    {
+        PRLEFReader::LEFCellInfo_t *cell = m_lefreader.getCellByName(cellname);
+        if (cell == nullptr)
+        {
+            doLog(LOG_ERROR,"Cannot find cell %s in the LEF database\n", cellname.c_str());
+            return;
+        }
+
+        LayoutItem *item = new LayoutItem(LayoutItem::TYPE_BOND);
+        item->m_instance = instance;
+        item->m_cellname = cellname;
+        item->m_location = m_lastLocation;
+        item->m_size = cell->m_sx;
+        item->m_lefinfo = cell;
+        item->m_flipped = flipped;
+
+        // Corner cells should be symmetrical
+        // i.e. width = height.
+        if (m_lastLocation == "N")
+        {
+            m_north.addItem(item);
+        }
+        else if (m_lastLocation == "W")
+        {
+            m_west.addItem(item);
+        }
+        else if (m_lastLocation == "S")
+        {
+            m_south.addItem(item);
+        }
+        else if (m_lastLocation == "E")
+        {
+            m_east.addItem(item);
+        }
+        else
+        {
+            doLog(LOG_ERROR, "Incorrect location on BOND %s\n", cellname.c_str());
+        }
+    }
+
     /** callback for die area in microns */
     virtual void onArea(double x, double y) override
     {

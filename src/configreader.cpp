@@ -245,7 +245,11 @@ bool ConfigReader::parse(std::istream &configstream)
                 else if (tokstr == "DESIGN")
                 {
                     if (!parseDesignName()) return false;
-                }                
+                }        
+                else if (tokstr == "BOND")
+                {
+                    if (!parseBond()) return false;
+                }           
                 else
                 {
                     std::stringstream ss;
@@ -335,6 +339,51 @@ bool ConfigReader::parsePad()
 
     m_padCount++;
     onPad(instance,location,cellname,flipped);
+
+    return true;
+}
+
+bool ConfigReader::parseBond()
+{
+    // PAD: instance location cellname
+    std::string tokstr;
+    std::string instance;
+    std::string cellname;
+    bool flipped = false;
+
+    // instance name
+    ConfigReader::token_t tok = tokenize(instance);
+    if (tok != TOK_IDENT)
+    {
+        error("Expected an instance name\n");
+        return false;
+    }
+
+    // parse optional 'FLIP' argument for flipped cells
+    tok = tokenize(cellname);
+    if ((tok == TOK_IDENT) && (cellname == "FLIP"))
+    {
+        flipped = true;
+        tok = tokenize(cellname);
+    }
+
+    // cell name    
+    if (tok != TOK_IDENT)
+    {
+        error("Expected a cell name\n");
+        return false;
+    }
+
+    // expect semicol
+    tok = tokenize(tokstr);
+    if (tok != TOK_SEMICOL)
+    {
+        error("Expected ;\n");
+        return false;
+    }
+
+    m_padCount++;
+    onBond(instance,cellname,flipped);
 
     return true;
 }

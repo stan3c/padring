@@ -98,6 +98,17 @@ public:
     {
         std::cout << "PAD " << instance << " " << location << " " << cellname << "\n";
     }
+    
+    /** callback for a bond 
+     *  if flipped == true, the (unplaced/unrotated) cell is flipped along the y axis.
+    */
+    virtual void onBond(
+        const std::string &instance,
+        const std::string &cellname,
+        bool flipped)
+    {
+        std::cout << "BOND " << instance << " " << cellname << "\n";
+    }
 
     /** callback for die area in microns */
     virtual void onArea(double x, double y) 
@@ -151,6 +162,7 @@ protected:
     bool inArray(const std::string &value, const std::array<std::string, 4> &array);
 
     bool parsePad();
+    bool parseBond();
     bool parseCorner();
     bool parseArea();
     bool parseGrid();

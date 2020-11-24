@@ -34,7 +34,8 @@ public:
         TYPE_CORNER,        ///< layout item is a corner with fixed dimensions.
         TYPE_FIXEDSPACE,    ///< layout item is a fixed space, to be filled with filler cells.
         TYPE_FLEXSPACE,     ///< layout item is a unspecified space, to be filled with filler cells.
-        TYPE_FILLER         ///< fixed-width filler cell.
+        TYPE_FILLER,        ///< fixed-width filler cell.
+        TYPE_BOND           ///< A bond pad
     };
 
     LayoutItem(LayoutItemType ltype) : m_lefinfo(nullptr),
