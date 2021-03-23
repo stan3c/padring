@@ -35,7 +35,8 @@ public:
         TYPE_FIXEDSPACE,    ///< layout item is a fixed space, to be filled with filler cells.
         TYPE_FLEXSPACE,     ///< layout item is a unspecified space, to be filled with filler cells.
         TYPE_FILLER,        ///< fixed-width filler cell.
-        TYPE_BOND           ///< A bond pad
+        TYPE_BOND,          ///< A bond pad
+        TYPE_FILLERDECL     ///< Filler declaration
     };
 
     LayoutItem(LayoutItemType ltype) : m_lefinfo(nullptr),
@@ -58,6 +59,7 @@ public:
     double      m_x;        ///< x-position of item (-1 if unknown)
     double      m_y;        ///< y-position of item (-1 if unknown)
     bool        m_flipped;  ///< when true, unplaced/unrotated cell is filled along y axis.
+    std::list<std::string> m_fillers;
     LayoutItemType m_ltype;
 };
 
@@ -106,7 +108,7 @@ public:
             // we insert a fixed spacer or offset.
             m_insertFlexSpacer = true;
         }
-        else
+        else if(item->m_ltype != LayoutItem::TYPE_FILLERDECL) // Excempt the FILLERDECL of changing the insertFlexSpacer state
         {
             m_insertFlexSpacer = false;
         }

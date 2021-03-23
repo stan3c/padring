@@ -43,7 +43,8 @@ double Layout::getMinSize() const
     for(auto item : m_items)
     {
         if (item->m_size >= 0 && 
-            item->m_ltype != LayoutItem::TYPE_BOND) // do not take in consideration the bonds
+            item->m_ltype != LayoutItem::TYPE_BOND && 
+            item->m_ltype != LayoutItem::TYPE_FILLERDECL) // do not take in consideration the bonds
         {
             total += item->m_size;
         }
@@ -66,7 +67,7 @@ void Layout::prepareForLayout()
 {
     // if there are no items on this edge,
     // add filler cells.
-    if (m_items.size() == 0)
+    if (m_items.size() == 0 || (m_items.size() == 1 && m_items.front()->m_ltype == LayoutItem::TYPE_FILLERDECL))
     {
         auto filler = new LayoutItem(LayoutItem::LayoutItemType::TYPE_FLEXSPACE);
         m_items.push_back(filler);

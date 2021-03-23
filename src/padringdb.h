@@ -215,6 +215,33 @@ public:
     {
         m_fillers.clear();
         m_fillers.assign(fillers.begin(), fillers.end());
+
+        // Besides of replacing the fillers, we also add the filler declaration to dynamically change fillers
+        LayoutItem *item = new LayoutItem(LayoutItem::TYPE_FILLERDECL);
+        item->m_fillers.assign(fillers.begin(), fillers.end());
+        item->m_size = 0;
+        if (m_lastLocation == "N")
+        {
+            m_north.addItem(item);
+        }
+        else if (m_lastLocation == "W")
+        {
+            m_west.addItem(item);
+        }
+        else if (m_lastLocation == "S")
+        {
+            m_south.addItem(item);
+        }
+        else if (m_lastLocation == "E")
+        {
+            m_east.addItem(item);
+        }
+    }
+
+    /** callback for filler cell prefix string */
+    virtual void onLoc(const std::string &location) override
+    {
+        m_lastLocation = location;
     }
 
     /** callback for space in microns */
