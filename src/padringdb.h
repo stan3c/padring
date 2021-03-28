@@ -164,6 +164,7 @@ public:
         item->m_cellname = cellname;
         item->m_location = m_lastLocation;
         item->m_size = cell->m_sx;
+        item->m_osize = cell->m_sy;
         item->m_lefinfo = cell;
         item->m_flipped = flipped;
         item->m_offset = gd;
