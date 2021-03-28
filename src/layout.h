@@ -41,7 +41,7 @@ public:
 
     LayoutItem(LayoutItemType ltype) : m_lefinfo(nullptr),
         m_ltype(ltype),
-        m_size(-1),
+        m_size(-1), m_osize(-1),
         m_x(-1.0), m_y(-1.0),
         m_flipped(false),m_offset(0.0)
     {        
@@ -55,6 +55,7 @@ public:
     std::string m_cellname; ///< cell name
     std::string m_location; ///< location of cell
     double      m_size;     ///< size of the item (-1 if unknown)
+    double      m_osize;    ///< size of the item in the other coordinate (-1 if unknown)
     double      m_offset;   ///< offset of the item (0 by default)
     double      m_x;        ///< x-position of item (-1 if unknown)
     double      m_y;        ///< y-position of item (-1 if unknown)
@@ -73,8 +74,15 @@ public:
         DIR_HORIZONTAL,
         DIR_VERTICAL
     };
+    enum side_t
+    {
+        SIDE_NORTH,
+        SIDE_SOUTH,
+        SIDE_EAST,
+        SIDE_WEST
+    };
 
-    Layout(direction_t dir);
+    Layout(direction_t dir, side_t side);
 
     virtual ~Layout();
 
@@ -220,6 +228,7 @@ protected:
     double m_dieSize;   ///< die size in the direction of layout
 
     direction_t             m_dir;      ///< direction of layout
+    side_t                  m_side;      ///< direction of layout
     double                  m_edgePos;  ///< position of fixed axis of layout
     std::list<LayoutItem*>  m_items;    ///< all the cells in the padring
     LayoutItem *m_firstCorner;

@@ -29,10 +29,10 @@ class PadringDB : public ConfigReader
 {
 public:
 
-    PadringDB() : m_north(Layout::DIR_HORIZONTAL),
-        m_south(Layout::DIR_HORIZONTAL),
-        m_east(Layout::DIR_VERTICAL),
-        m_west(Layout::DIR_VERTICAL),
+    PadringDB() : m_north(Layout::DIR_HORIZONTAL, Layout::SIDE_NORTH),
+        m_south(Layout::DIR_HORIZONTAL, Layout::SIDE_SOUTH),
+        m_east(Layout::DIR_VERTICAL, Layout::SIDE_EAST),
+        m_west(Layout::DIR_VERTICAL, Layout::SIDE_WEST),
         m_grid(1.0) 
     {
         m_south.setEdgePos(0.0);
@@ -114,6 +114,7 @@ public:
         item->m_cellname = cellname;
         item->m_location = location;
         item->m_size = cell->m_sx;
+        item->m_osize = cell->m_sy;
         item->m_lefinfo = cell;
         item->m_flipped = flipped;
 

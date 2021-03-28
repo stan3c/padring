@@ -282,6 +282,10 @@ int main(int argc, char *argv[])
             svg.writeCell(item);
             def.writeCell(item);
         }
+        else if (item->m_ltype == LayoutItem::TYPE_FILLERDECL) {
+            // Re-load the fillers
+            fillerHandler.addFillers(&padring.m_lefreader, item->m_fillers);
+        }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
             // do fillers
@@ -330,6 +334,10 @@ int main(int argc, char *argv[])
             svg.writeCell(item);
             def.writeCell(item);
         }
+        else if (item->m_ltype == LayoutItem::TYPE_FILLERDECL) {
+            // Re-load the fillers
+            fillerHandler.addFillers(&padring.m_lefreader, item->m_fillers);
+        }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
             // do fillers
@@ -377,6 +385,10 @@ int main(int argc, char *argv[])
             if (writer != nullptr) writer->writeCell(item);
             svg.writeCell(item);
             def.writeCell(item);
+        }
+        else if (item->m_ltype == LayoutItem::TYPE_FILLERDECL) {
+            // Re-load the fillers
+            fillerHandler.addFillers(&padring.m_lefreader, item->m_fillers);
         }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
