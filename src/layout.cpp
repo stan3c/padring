@@ -23,7 +23,7 @@
 #include "layout.h"
 
 
-Layout::Layout(direction_t dir) : m_dir(dir), m_edgePos(0.0), m_insertFlexSpacer(true)
+Layout::Layout(direction_t dir, side_t side) : m_dir(dir), m_side(side), m_edgePos(0.0), m_insertFlexSpacer(true)
 {
     m_firstCorner = nullptr;
     m_lastCorner  = nullptr;
@@ -43,7 +43,8 @@ double Layout::getMinSize() const
     for(auto item : m_items)
     {
         if (item->m_size >= 0 && 
-            item->m_ltype != LayoutItem::TYPE_BOND) // do not take in consideration the bonds
+            item->m_ltype != LayoutItem::TYPE_BOND && 
+            item->m_ltype != LayoutItem::TYPE_FILLERDECL) // do not take in consideration the bonds
         {
             total += item->m_size;
         }
@@ -66,7 +67,7 @@ void Layout::prepareForLayout()
 {
     // if there are no items on this edge,
     // add filler cells.
-    if (m_items.size() == 0)
+    if (m_items.size() == 0 || (m_items.size() == 1 && m_items.front()->m_ltype == LayoutItem::TYPE_FILLERDECL))
     {
         auto filler = new LayoutItem(LayoutItem::LayoutItemType::TYPE_FLEXSPACE);
         m_items.push_back(filler);
@@ -160,6 +161,14 @@ bool Layout::doLayout()
             if(last_cell != nullptr) {
                 item->m_x = last_cell->m_x + ( m_dir == DIR_HORIZONTAL ? (last_bond + item->m_offset) : 0.0 ) ;
                 item->m_y = last_cell->m_y + ( m_dir == DIR_HORIZONTAL ? 0.0 : (last_bond + item->m_offset) ) ;
+                if(item->m_flipped) {
+                  switch(m_side) {
+                    case Layout::SIDE_NORTH: item->m_y += item->m_osize; break;
+                    case Layout::SIDE_SOUTH: item->m_y -= item->m_osize; break;
+                    case Layout::SIDE_EAST:  item->m_x += item->m_osize; break;
+                    default:        /*WEST*/ item->m_x -= item->m_osize; break;
+                  }
+                }
                 last_bond += item->m_size + item->m_offset;
             }
             break;

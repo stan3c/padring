@@ -141,6 +141,12 @@ public:
         std::cout << "Offset " << offset << "\n";
     }
 
+    /** callback for offset in microns */
+    virtual void onLoc(const std::string& location)
+    {
+        std::cout << "Loc " << location << "\n";
+    }
+
     /** callback for design name */
     virtual void onDesignName(const std::string &designName)
     {
@@ -171,6 +177,7 @@ protected:
     bool parseOffset();
     bool parseFiller();
     bool parseDesignName();
+    bool parseLoc();
 
     token_t      tokenize(std::string &tokstr);
     char         m_tokchar;

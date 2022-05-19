@@ -249,7 +249,11 @@ bool ConfigReader::parse(std::istream &configstream)
                 else if (tokstr == "BOND")
                 {
                     if (!parseBond()) return false;
-                }           
+                }
+                else if (tokstr == "LOC")
+                {
+                    if (!parseLoc()) return false;
+                }               
                 else
                 {
                     std::stringstream ss;
@@ -633,6 +637,41 @@ bool ConfigReader::parseFiller()
     }
 
     onFiller(fillers);
+    return true;
+}
+
+bool ConfigReader::parseLoc()
+{
+    // FILLER: fillername
+    std::string tokstr;
+    std::string location;
+
+    // location name
+    ConfigReader::token_t tok = tokenize(location);
+    if (tok != TOK_IDENT)
+    {
+        error("Expected a location\n");
+        return false;
+    }
+
+    // PADs can only be on North, South, East or West
+    std::array<std::string, 4> items = {"N","E","S","W"};
+    if (!inArray(location, items))
+    {
+        error("Expected a pad location to be one of N/E/S/W\n");
+        return false;
+    }
+
+    // expect semicol
+    tok = tokenize(tokstr);
+    if (tok != TOK_SEMICOL)
+    {
+        error("Expected ;\n");
+        return false;
+    }
+
+
+    onLoc(location);
     return true;
 }
 

@@ -22,11 +22,52 @@
 
 #include <string>
 #include <list>
+#include "prlefreader.h"
 
 class FillerHandler
 {
 public:
     FillerHandler() : m_sorted(false) {}
+
+    /** Clear all the filler */
+    void clearFillerCell() {
+        m_fillerCells.clear();
+    }
+    
+    void addFillers(PRLEFReader* reader, const std::list<std::string>& m_fillers) {
+        clearFillerCell();
+        if (m_fillers.size() == 0)
+        {
+            for(auto lefCell : reader->m_cells)
+            {
+                if (lefCell.second->m_isFiller) 
+                {
+                    addFillerCell(lefCell.first, lefCell.second->m_sx);
+                }
+            }
+        }
+        else
+        {
+            // use the provided filler cell prefix to search for filler cells
+            for(auto namefill : m_fillers) 
+            {
+                // match any of the fillers
+                bool found = false;
+                for(auto lefCell : reader->m_cells)
+                {
+                    if (lefCell.first.compare(namefill) == 0) 
+                    {
+                        found = true;
+                        addFillerCell(lefCell.first, lefCell.second->m_sx);
+                        break;
+                    }
+                }
+                if(!found) {
+                    doLog(LOG_ERROR, "Filler cell %s not found\n", namefill);
+                }
+            }
+        }
+    }
 
     /** add a filler cell to the list of cells */
     void addFillerCell(const std::string &cellName, double width)

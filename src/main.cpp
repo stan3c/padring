@@ -130,37 +130,7 @@ int main(int argc, char *argv[])
     // if an explicit filler cell prefix was not given,
     // search the cell database for filler cells
     FillerHandler fillerHandler;
-    if (padring.m_fillers.size() == 0)
-    {
-        for(auto lefCell : padring.m_lefreader.m_cells)
-        {
-            if (lefCell.second->m_isFiller) 
-            {
-                fillerHandler.addFillerCell(lefCell.first, lefCell.second->m_sx);
-            }
-        }
-    }
-    else
-    {
-        // use the provided filler cell prefix to search for filler cells
-        for(auto namefill : padring.m_fillers) 
-        {
-            // match any of the fillers
-            bool found = false;
-            for(auto lefCell : padring.m_lefreader.m_cells)
-            {
-                if (lefCell.first.compare(namefill) == 0) 
-                {
-                    found = true;
-                    fillerHandler.addFillerCell(lefCell.first, lefCell.second->m_sx);
-                    break;
-                }
-            }
-            if(!found) {
-                doLog(LOG_ERROR, "Filler cell %s not found\n", namefill);
-            }
-        }
-    }
+    fillerHandler.addFillers(&padring.m_lefreader, padring.m_fillers);
 
     doLog(LOG_INFO, "Found %d filler cells\n", fillerHandler.getCellCount());
 
@@ -283,6 +253,10 @@ int main(int argc, char *argv[])
             def.writeCell(item);
             ver.writeCell(item);
         }
+        else if (item->m_ltype == LayoutItem::TYPE_FILLERDECL) {
+            // Re-load the fillers
+            fillerHandler.addFillers(&padring.m_lefreader, item->m_fillers);
+        }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
             // do fillers
@@ -333,6 +307,10 @@ int main(int argc, char *argv[])
             svg.writeCell(item);
             def.writeCell(item);
             ver.writeCell(item);
+        }
+        else if (item->m_ltype == LayoutItem::TYPE_FILLERDECL) {
+            // Re-load the fillers
+            fillerHandler.addFillers(&padring.m_lefreader, item->m_fillers);
         }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
@@ -385,6 +363,10 @@ int main(int argc, char *argv[])
             def.writeCell(item);
             ver.writeCell(item);
         }
+        else if (item->m_ltype == LayoutItem::TYPE_FILLERDECL) {
+            // Re-load the fillers
+            fillerHandler.addFillers(&padring.m_lefreader, item->m_fillers);
+        }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
             // do fillers
@@ -435,6 +417,10 @@ int main(int argc, char *argv[])
             svg.writeCell(item);
             def.writeCell(item);
             ver.writeCell(item);
+        }
+        else if (item->m_ltype == LayoutItem::TYPE_FILLERDECL) {
+            // Re-load the fillers
+            fillerHandler.addFillers(&padring.m_lefreader, item->m_fillers);
         }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
