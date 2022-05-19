@@ -64,6 +64,7 @@ set(PADRINGSRC
     ${PROJECT_SOURCE_DIR}/src/layout.cpp
     ${PROJECT_SOURCE_DIR}/src/svgwriter.cpp
     ${PROJECT_SOURCE_DIR}/src/defwriter.cpp
+    ${PROJECT_SOURCE_DIR}/src/verilogwriter.cpp
     ${PROJECT_SOURCE_DIR}/src/prlefreader.cpp
     ${PROJECT_SOURCE_DIR}/src/configreader.cpp
     ${PROJECT_SOURCE_DIR}/src/lef/lefreader.cpp

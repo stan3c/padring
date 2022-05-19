@@ -36,6 +36,7 @@
 #include "padringdb.h"
 #include "svgwriter.h"
 #include "defwriter.h"
+#include "verilogwriter.h"
 #include "fillerhandler.h"
 #include "debugutils.h"
 #include "gds2/gds2writer.h"
@@ -56,6 +57,7 @@ int main(int argc, char *argv[])
         ("o,output", "GDS2 output file", cxxopts::value<std::string>())
         ("svg", "SVG output file", cxxopts::value<std::string>())
         ("def", "DEF output file", cxxopts::value<std::string>())
+        ("ver", "Verilog output file", cxxopts::value<std::string>())
         ("q,quiet", "produce no console output")
         ("v,verbose", "produce verbose output")
         ("filler", "set the filler cell prefix", cxxopts::value<std::vector<std::string>>())
@@ -215,10 +217,24 @@ int main(int argc, char *argv[])
         }
     }
 
+    // write the padring to an Verilog file
+    std::ofstream veros;
+    if (cmdresult.count("ver") != 0)
+    {
+        doLog(LOG_INFO,"Writing padring to verilog file: %s\n", cmdresult["ver"].as<std::string>().c_str());
+        veros.open(cmdresult["ver"].as<std::string>(), std::ofstream::out);
+        if (!veros.is_open())
+        {
+            doLog(LOG_ERROR, "Cannot open verilog file for writing!\n");
+            exit(1);
+        }
+    }
+
     SVGWriter svg(svgos, padring.m_dieWidth, padring.m_dieHeight);
     DEFWriter def(defos, padring.m_dieWidth, padring.m_dieHeight);
     def.setDatabaseUnits(LEFDatabaseUnits);
     def.setDesignName(padring.m_designName);
+    VerilogWriter ver(veros);
 
     // emit GDS2 and SVG
     GDS2Writer *writer = nullptr;
@@ -245,6 +261,11 @@ int main(int argc, char *argv[])
     def.writeCell(bottomleft);
     def.writeCell(bottomright);
 
+    ver.writeCell(topleft);
+    ver.writeCell(topright);
+    ver.writeCell(bottomleft);
+    ver.writeCell(bottomright);
+
     double north_y = padring.m_dieHeight;
     for(auto item : padring.m_north)
     {
@@ -253,12 +274,14 @@ int main(int argc, char *argv[])
             if (writer != nullptr) writer->writeCell(item);
             svg.writeCell(item);
             def.writeCell(item);
+            ver.writeCell(item);
         }
         else if (item->m_ltype == LayoutItem::TYPE_BOND)
         {
             if (writer != nullptr) writer->writeCell(item);
             svg.writeCell(item);
             def.writeCell(item);
+            ver.writeCell(item);
         }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
@@ -281,12 +304,13 @@ int main(int argc, char *argv[])
                     if (writer != nullptr) writer->writeCell(&filler);
                     svg.writeCell(&filler);
                     def.writeCell(&filler);
+                    ver.writeCell(&filler);
                     space -= width;
                     pos += width;
                 }
                 else
                 {
-                    doLog(LOG_ERROR, "Cannot find filler cell that fits remaining width %f\n", space);
+                    doLog(LOG_ERROR, "Cannot find filler cell that fits remaining width %f (%d)\n", space, item->m_ltype);
                     exit(1);
                 }
             }
@@ -300,13 +324,15 @@ int main(int argc, char *argv[])
         {
             if (writer != nullptr) writer->writeCell(item);
             svg.writeCell(item);  
-            def.writeCell(item);          
+            def.writeCell(item);            
+            ver.writeCell(item);
         }
         else if (item->m_ltype == LayoutItem::TYPE_BOND)
         {
             if (writer != nullptr) writer->writeCell(item);
             svg.writeCell(item);
             def.writeCell(item);
+            ver.writeCell(item);
         }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
@@ -329,12 +355,13 @@ int main(int argc, char *argv[])
                     if (writer != nullptr) writer->writeCell(&filler);
                     svg.writeCell(&filler);
                     def.writeCell(&filler);
+                    ver.writeCell(&filler);
                     space -= width;
                     pos += width;
                 }
                 else
                 {
-                    doLog(LOG_ERROR, "Cannot find filler cell that fits remaining width %f\n", space);
+                    doLog(LOG_ERROR, "Cannot find filler cell that fits remaining width %f (%d)\n", space, item->m_ltype);
                     exit(1);
                 }
             }
@@ -349,12 +376,14 @@ int main(int argc, char *argv[])
             if (writer != nullptr) writer->writeCell(item);
             svg.writeCell(item);
             def.writeCell(item);
+            ver.writeCell(item);
         }
         else if (item->m_ltype == LayoutItem::TYPE_BOND)
         {
             if (writer != nullptr) writer->writeCell(item);
             svg.writeCell(item);
             def.writeCell(item);
+            ver.writeCell(item);
         }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
@@ -377,12 +406,13 @@ int main(int argc, char *argv[])
                     if (writer != nullptr) writer->writeCell(&filler);
                     svg.writeCell(&filler);
                     def.writeCell(&filler);
+                    ver.writeCell(&filler);
                     space -= width;
                     pos += width;
                 }
                 else
                 {
-                    doLog(LOG_ERROR, "Cannot find filler cell that fits remaining width %f\n", space);
+                    doLog(LOG_ERROR, "Cannot find filler cell that fits remaining width %f (%d)\n", space, item->m_ltype);
                     exit(1);
                 }
             }
@@ -397,12 +427,14 @@ int main(int argc, char *argv[])
             if (writer != nullptr) writer->writeCell(item);
             svg.writeCell(item);
             def.writeCell(item);
+            ver.writeCell(item);
         }
         else if (item->m_ltype == LayoutItem::TYPE_BOND)
         {
             if (writer != nullptr) writer->writeCell(item);
             svg.writeCell(item);
             def.writeCell(item);
+            ver.writeCell(item);
         }
         else if ((item->m_ltype == LayoutItem::TYPE_FIXEDSPACE) || (item->m_ltype == LayoutItem::TYPE_FLEXSPACE))
         {
@@ -425,12 +457,13 @@ int main(int argc, char *argv[])
                     if (writer != nullptr) writer->writeCell(&filler);
                     svg.writeCell(&filler);
                     def.writeCell(&filler);
+                    ver.writeCell(&filler);
                     space -= width;
                     pos += width;
                 }
                 else
                 {
-                    doLog(LOG_ERROR, "Cannot find filler cell that fits remaining width %f\n", space);
+                    doLog(LOG_ERROR, "Cannot find filler cell that fits remaining width %f (%d)\n", space, item->m_ltype);
                     exit(1);
                 }
             }

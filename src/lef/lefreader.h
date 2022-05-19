@@ -87,6 +87,9 @@ public:
     /** callback for PIN use */
     virtual void onPinUse(const std::string &use) {}
 
+    /** callback for PIN PORT CLASS use */
+    virtual void onPinLayerClass(const std::string &className) {}
+
     /** callback when done parsing */
     virtual void onEndParse() {}
 
@@ -133,6 +136,7 @@ protected:
     
     bool parsePort();
     bool parsePortLayer();
+    bool parseClassLayer();
     bool parsePortLayerItem();
     bool parseRect();
     

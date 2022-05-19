@@ -729,6 +729,10 @@ bool LEFReader::parsePort()
         {
             parsePortLayer();
         }
+        if (m_tokstr == "CLASS")
+        {
+            parseClassLayer();
+        }
         else if (m_tokstr == "END")
         {
             break;
@@ -794,6 +798,37 @@ bool LEFReader::parsePortLayer()
             return false;
         }
     } while(m_tokstr != "END");
+    
+    return true;
+}
+
+bool LEFReader::parseClassLayer()
+{
+    // CLASS <name> ';'
+    std::string name;
+
+    m_curtok = tokenize(name);
+    if (m_curtok != TOK_IDENT)
+    {
+        error("Expected class name\n");
+        return false;
+    }
+
+    m_curtok = tokenize(m_tokstr);
+    if (m_curtok != TOK_SEMICOL)
+    {
+        error("Expected a semicolon\n");
+        return false;
+    }    
+
+    m_curtok = tokenize(m_tokstr);
+    if (m_curtok != TOK_EOL)
+    {
+        error("Expected an EOL\n");
+        return false;
+    }
+    
+    onPinLayerClass(name);
     
     return true;
 }

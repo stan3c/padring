@@ -2,6 +2,7 @@
     PADRING -- a padring generator for ASICs.
 
     Copyright (c) 2019, Niels Moseley <niels@symbioticeda.com>
+    Copyright (c) 2022, Ckristian Duran <duran@vlsilab.ee.uec.ac.jp>
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose with or without fee is hereby granted, provided that the above
@@ -142,3 +143,54 @@ void PRLEFReader::onDatabaseUnitsMicrons(double unitsPerMicron)
     m_lefDatabaseUnits = unitsPerMicron;
     //doLog(LOG_INFO,"LEF database units: %f units per micron\n", unitsPerMicron);
 }
+
+void PRLEFReader::onPin(const std::string &pinName) {
+    auto iter = m_parseCell->m_pins.find(pinName);
+    if (iter != m_parseCell->m_pins.end())
+    {
+        doLog(LOG_WARN,"Pin %s already in database - replaced\n", pinName.c_str());
+        m_parsePin = iter->second;
+    }
+    else
+    {
+        m_parsePin = new LEFPinInfo_t();
+        m_parseCell->m_name = pinName;
+        m_parseCell->m_pins.insert(std::make_pair(pinName, m_parsePin));
+
+        doLog(LOG_VERBOSE,"Added LEF pin %s\n", pinName.c_str());
+    }
+}
+
+void PRLEFReader::onPinDirection(const std::string &direction) {
+    if (direction.find("INPUT") != std::string::npos){
+        m_parsePin->m_dir = 0;
+    }
+    else if (direction.find("OUTPUT") != std::string::npos){
+        m_parsePin->m_dir = 1;
+    }
+    else{
+        m_parsePin->m_dir = 2;
+    }
+}
+
+void PRLEFReader::onPinUse(const std::string &use) {
+    if (use.find("SIGNAL") != std::string::npos){
+        m_parsePin->m_use = 0;
+    }
+    else if (use.find("POWER") != std::string::npos){
+        m_parsePin->m_use = 1;
+    }
+    else if (use.find("GROUND") != std::string::npos){
+        m_parsePin->m_use = 2;
+    }
+    else{
+        m_parsePin->m_use = 0;
+    }
+}
+
+void PRLEFReader::onPinLayerClass(const std::string &className) {
+    if (className.find("CORE") != std::string::npos){
+        m_parsePin->m_class = 1;
+    }
+}
+

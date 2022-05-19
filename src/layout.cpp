@@ -146,6 +146,7 @@ bool Layout::doLayout()
             newPos = pos + meanFlexSpaceSize + error;
             newPos = std::floor(newPos / grid) * grid;  // round new position to grid
             item->m_size = newPos - pos;                // set size of FLEXSPACE
+            if(item->m_size < grid) item->m_size = 0.0; // To avoid imprecision
             pos = newPos;
             error += (meanFlexSpaceSize - item->m_size);
             break;
