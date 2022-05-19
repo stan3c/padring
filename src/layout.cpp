@@ -93,6 +93,10 @@ void Layout::prepareForLayout()
     }
 }
 
+void Layout::setGrid(double grid) {
+    m_grid = grid;
+}
+
 bool Layout::doLayout()
 {
     prepareForLayout();
@@ -128,8 +132,7 @@ bool Layout::doLayout()
         setItemEdgePos(m_firstCorner);
     }
 
-    // FIXME: make grid configurable! 
-    double grid = 1.0;
+    double grid = m_grid;
     double newPos;
     double error = 0.0;
     LayoutItem* last_cell = nullptr;
@@ -137,7 +140,7 @@ bool Layout::doLayout()
     for(auto item : m_items)
     {
         setItemPos(item, pos);
-        doLog(LOG_INFO,"Processing cell %s inst %s\n", item->m_instance.c_str(), item->m_cellname.c_str());
+        doLog(LOG_INFO,"Processing cell %s inst %s (%d)\n", item->m_instance.c_str(), item->m_cellname.c_str(), item->m_ltype);
 
         // advance the position depending on the type of
         // item
@@ -147,7 +150,6 @@ bool Layout::doLayout()
             newPos = pos + meanFlexSpaceSize + error;
             newPos = std::floor(newPos / grid) * grid;  // round new position to grid
             item->m_size = newPos - pos;                // set size of FLEXSPACE
-            if(item->m_size < grid) item->m_size = 0.0; // To avoid imprecision
             pos = newPos;
             error += (meanFlexSpaceSize - item->m_size);
             break;
@@ -178,6 +180,10 @@ bool Layout::doLayout()
         case LayoutItem::TYPE_FIXEDSPACE:
             pos += item->m_size;
             break;
+        }
+        if(item->m_size > 0.0 && item->m_size < grid) {
+          doLog(LOG_ERROR, "Error problem: size = %g (grid = %g)\n", item->m_size, grid);
+          item->m_size = 0; // To avoid imprecision
         }
     }
 

@@ -27,7 +27,7 @@
 #include "verilogwriter.h"
 
 VerilogWriter::VerilogWriter(std::ostream &os)
-    : m_def(os)
+    : m_def(os), m_firstever(true)
 {
 }
 
@@ -51,10 +51,12 @@ void VerilogWriter::writeToFile()
     m_def << "// Direction phase \n";
     m_def << m_ss_dirs.str();
     
-    m_def << "\n\n";
+    m_def << "\n";
 
     m_def << "// Variable phase \n";
     m_def << m_ss_vars.str();
+    
+    m_def << "\n";
 
     m_def << "// Instantiation phase \n";
     m_def << m_ss_body.str();
@@ -85,6 +87,11 @@ void VerilogWriter::writeCell(const LayoutItem *item)
         
         // Put it in the vars
         m_ss_vars << "  wire " << varName << ";\n";
+        
+        // Put it in the header
+        if(!m_firstever) m_ss_header << ",\n";
+        m_ss_header << "  " << varName;
+        m_firstever = false;
         
         // Put it in the body
         if(!first) m_ss_body << ", ";

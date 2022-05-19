@@ -283,6 +283,10 @@ public:
 
     void doLayout()
     {
+        m_north.setGrid(m_grid);
+        m_south.setGrid(m_grid);
+        m_west.setGrid(m_grid);
+        m_east.setGrid(m_grid);
         m_north.doLayout();
         m_south.doLayout();
         m_west.doLayout();

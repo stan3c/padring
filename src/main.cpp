@@ -205,6 +205,7 @@ int main(int argc, char *argv[])
     def.setDatabaseUnits(LEFDatabaseUnits);
     def.setDesignName(padring.m_designName);
     VerilogWriter ver(veros);
+    ver.setDesignName(padring.m_designName);
 
     // emit GDS2 and SVG
     GDS2Writer *writer = nullptr;
@@ -235,6 +236,8 @@ int main(int argc, char *argv[])
     ver.writeCell(topright);
     ver.writeCell(bottomleft);
     ver.writeCell(bottomright);
+    
+    int numfill = 0;
 
     double north_y = padring.m_dieHeight;
     for(auto item : padring.m_north)
@@ -262,7 +265,7 @@ int main(int argc, char *argv[])
             // do fillers
             double space = item->m_size;
             double pos = item->m_x;
-            while(space > 0)
+            while(space > 0.0)
             {
                 std::string cellName;
                 double width = fillerHandler.getFillerCell(space, cellName);
@@ -270,6 +273,7 @@ int main(int argc, char *argv[])
                 {
                     LayoutItem filler(LayoutItem::TYPE_FILLER);
                     filler.m_cellname = cellName;
+                    filler.m_instance = "FILLER_" + std::to_string(numfill);
                     filler.m_x = pos;
                     filler.m_y = north_y;
                     filler.m_size = width;
@@ -280,11 +284,15 @@ int main(int argc, char *argv[])
                     def.writeCell(&filler);
                     ver.writeCell(&filler);
                     space -= width;
+                    if(space > 0.0 && space < padring.m_grid) {
+                      space = 0; // To avoid imprecision
+                    }
                     pos += width;
+                    numfill++;
                 }
                 else
                 {
-                    doLog(LOG_ERROR, "Cannot find filler cell that fits remaining width %f (%d)\n", space, item->m_ltype);
+                    doLog(LOG_ERROR, "(north) Cannot find filler cell that fits remaining width %g (%d)\n", space, item->m_ltype);
                     exit(1);
                 }
             }
@@ -317,7 +325,7 @@ int main(int argc, char *argv[])
             // do fillers
             double space = item->m_size;
             double pos = item->m_x;
-            while(space > 0)
+            while(space > 0.0)
             {
                 std::string cellName;
                 double width = fillerHandler.getFillerCell(space, cellName);
@@ -325,6 +333,7 @@ int main(int argc, char *argv[])
                 {
                     LayoutItem filler(LayoutItem::TYPE_FILLER);
                     filler.m_cellname = cellName;
+                    filler.m_instance = "FILLER_" + std::to_string(numfill);
                     filler.m_x = pos;
                     filler.m_y = south_y;
                     filler.m_size = width;
@@ -335,11 +344,15 @@ int main(int argc, char *argv[])
                     def.writeCell(&filler);
                     ver.writeCell(&filler);
                     space -= width;
+                    if(space > 0.0 && space < padring.m_grid) {
+                      space = 0; // To avoid imprecision
+                    }
                     pos += width;
+                    numfill++;
                 }
                 else
                 {
-                    doLog(LOG_ERROR, "Cannot find filler cell that fits remaining width %f (%d)\n", space, item->m_ltype);
+                    doLog(LOG_ERROR, "(south) Cannot find filler cell that fits remaining width %g (%d)\n", space, item->m_ltype);
                     exit(1);
                 }
             }
@@ -372,7 +385,7 @@ int main(int argc, char *argv[])
             // do fillers
             double space = item->m_size;
             double pos = item->m_y;
-            while(space > 0)
+            while(space > 0.0)
             {
                 std::string cellName;
                 double width = fillerHandler.getFillerCell(space, cellName);
@@ -380,6 +393,7 @@ int main(int argc, char *argv[])
                 {
                     LayoutItem filler(LayoutItem::TYPE_FILLER);
                     filler.m_cellname = cellName;
+                    filler.m_instance = "FILLER_" + std::to_string(numfill);
                     filler.m_x = west_x;
                     filler.m_y = pos;
                     filler.m_size = width;
@@ -390,11 +404,15 @@ int main(int argc, char *argv[])
                     def.writeCell(&filler);
                     ver.writeCell(&filler);
                     space -= width;
+                    if(space > 0.0 && space < padring.m_grid) {
+                      space = 0; // To avoid imprecision
+                    }
                     pos += width;
+                    numfill++;
                 }
                 else
                 {
-                    doLog(LOG_ERROR, "Cannot find filler cell that fits remaining width %f (%d)\n", space, item->m_ltype);
+                    doLog(LOG_ERROR, "(east) Cannot find filler cell that fits remaining width %g (%d)\n", space, item->m_ltype);
                     exit(1);
                 }
             }
@@ -427,7 +445,7 @@ int main(int argc, char *argv[])
             // do fillers
             double space = item->m_size;
             double pos = item->m_y;
-            while(space > 0)
+            while(space > 0.0)
             {
                 std::string cellName;
                 double width = fillerHandler.getFillerCell(space, cellName);
@@ -435,6 +453,7 @@ int main(int argc, char *argv[])
                 {
                     LayoutItem filler(LayoutItem::TYPE_FILLER);
                     filler.m_cellname = cellName;
+                    filler.m_instance = "FILLER_" + std::to_string(numfill);
                     filler.m_x = east_x;
                     filler.m_y = pos;
                     filler.m_size = width;
@@ -445,11 +464,15 @@ int main(int argc, char *argv[])
                     def.writeCell(&filler);
                     ver.writeCell(&filler);
                     space -= width;
+                    if(space > 0.0 && space < padring.m_grid) {
+                      space = 0; // To avoid imprecision
+                    }
                     pos += width;
+                    numfill++;
                 }
                 else
                 {
-                    doLog(LOG_ERROR, "Cannot find filler cell that fits remaining width %f (%d)\n", space, item->m_ltype);
+                    doLog(LOG_ERROR, "(west) Cannot find filler cell that fits remaining width %g (%d)\n", space, item->m_ltype);
                     exit(1);
                 }
             }

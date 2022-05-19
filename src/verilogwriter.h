@@ -52,6 +52,7 @@ protected:
     std::stringstream   m_ss_body;
     std::string         m_designName;
     std::ostream        &m_def;
+    bool                m_firstever;
 };
 
 #endif

@@ -164,6 +164,9 @@ public:
     /** get the minimum size of all the items */
     double getMinSize() const;
 
+    /** set grid */
+    void setGrid(double grid);
+
     /** perform the layout */
     bool doLayout();
 
@@ -230,6 +233,7 @@ protected:
     direction_t             m_dir;      ///< direction of layout
     side_t                  m_side;      ///< direction of layout
     double                  m_edgePos;  ///< position of fixed axis of layout
+    double                  m_grid;     ///< the grid
     std::list<LayoutItem*>  m_items;    ///< all the cells in the padring
     LayoutItem *m_firstCorner;
     LayoutItem *m_lastCorner;
