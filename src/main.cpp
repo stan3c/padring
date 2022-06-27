@@ -37,6 +37,7 @@
 #include "svgwriter.h"
 #include "defwriter.h"
 #include "verilogwriter.h"
+#include "csvwriter.h"
 #include "fillerhandler.h"
 #include "debugutils.h"
 #include "gds2/gds2writer.h"
@@ -58,6 +59,7 @@ int main(int argc, char *argv[])
         ("svg", "SVG output file", cxxopts::value<std::string>())
         ("def", "DEF output file", cxxopts::value<std::string>())
         ("ver", "Verilog output file", cxxopts::value<std::string>())
+        ("csv", "CSV output file", cxxopts::value<std::string>())
         ("q,quiet", "produce no console output")
         ("v,verbose", "produce verbose output")
         ("filler", "set the filler cell prefix", cxxopts::value<std::vector<std::string>>())
@@ -200,12 +202,28 @@ int main(int argc, char *argv[])
         }
     }
 
+    // write the padring to an Verilog file
+    std::ofstream csvos;
+    if (cmdresult.count("csv") != 0)
+    {
+        doLog(LOG_INFO,"Writing padring to csv file: %s\n", cmdresult["csv"].as<std::string>().c_str());
+        csvos.open(cmdresult["csv"].as<std::string>(), std::ofstream::out);
+        if (!csvos.is_open())
+        {
+            doLog(LOG_ERROR, "Cannot open csv file for writing!\n");
+            exit(1);
+        }
+    }
+
     SVGWriter svg(svgos, padring.m_dieWidth, padring.m_dieHeight);
     DEFWriter def(defos, padring.m_dieWidth, padring.m_dieHeight);
     def.setDatabaseUnits(LEFDatabaseUnits);
     def.setDesignName(padring.m_designName);
     VerilogWriter ver(veros);
     ver.setDesignName(padring.m_designName);
+    
+    CSVWriter csv(csvos);
+    csv.writePadring(&padring);
 
     // emit GDS2 and SVG
     GDS2Writer *writer = nullptr;

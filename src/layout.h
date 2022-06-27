@@ -181,6 +181,14 @@ public:
     /** end iterator for LayoutItems */
     item_iterator end() { return m_items.end(); }
 
+    typedef std::list<LayoutItem*>::reverse_iterator item_riterator;
+
+    /** begin iterator for LayoutItems */
+    item_riterator rbegin() { return m_items.rbegin(); }
+
+    /** end iterator for LayoutItems */
+    item_riterator rend() { return m_items.rend(); }
+
 protected: 
     double getItemPos(const LayoutItem *item) const
     {
