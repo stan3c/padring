@@ -102,7 +102,7 @@ void DEFWriter::writeCell(const LayoutItem *item)
         y -= item->m_lefinfo->m_sx;
         toDEFCoordinates(x,y);
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
-        m_ss << "E";
+        m_ss << "E";  // NOTE: In donn version, is W
         if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
         m_ss << " ;\n";
     }
@@ -112,7 +112,7 @@ void DEFWriter::writeCell(const LayoutItem *item)
         //x += item->m_lefinfo->m_sy;
         toDEFCoordinates(x,y);
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
-        m_ss << "W";
+        m_ss << "W";  // NOTE: In donn version, is E
         if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
         m_ss << " ;\n";
     }
@@ -121,7 +121,7 @@ void DEFWriter::writeCell(const LayoutItem *item)
         y -= item->m_lefinfo->m_sy;
         toDEFCoordinates(x,y);
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
-        m_ss << "S";
+        m_ss << "S";  // NOTE: In donn version, is N
         if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
         m_ss << " ;\n";
     }
@@ -129,7 +129,7 @@ void DEFWriter::writeCell(const LayoutItem *item)
     {
         toDEFCoordinates(x,y);
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
-        m_ss << "N";
+        m_ss << "N";  // NOTE: In donn version, is S
         if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
         m_ss << " ;\n";
     }
@@ -140,11 +140,11 @@ void DEFWriter::writeCell(const LayoutItem *item)
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
         if (!item->m_flipped) 
         {
-            m_ss << " W";
+            m_ss << " W";  // NOTE: In donn version, is E
         }
         else
         {
-            m_ss << " FE";
+            m_ss << " FE";  // NOTE: In donn version, is W
         }
         if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
         m_ss << " ;\n";
@@ -156,11 +156,11 @@ void DEFWriter::writeCell(const LayoutItem *item)
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
         if (!item->m_flipped) 
         {
-            m_ss << " S";
+            m_ss << " S";  // NOTE: In donn version, is N
         }
         else
         {
-            m_ss << " FS";
+            m_ss << " FS";  // NOTE: In donn version, is S
         }
         if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
         m_ss << " ;\n";
@@ -172,11 +172,11 @@ void DEFWriter::writeCell(const LayoutItem *item)
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
         if (!item->m_flipped)
         {
-            m_ss << " N";
+            m_ss << " N";  // NOTE: In donn version, is S
         }
         else
         {
-            m_ss << " FN";
+            m_ss << " FN";  // NOTE: In donn version, is N
         }
         if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
         m_ss << " ;\n";
@@ -187,11 +187,11 @@ void DEFWriter::writeCell(const LayoutItem *item)
         m_ss << "    + PLACED ( " << x << " " << y << " ) ";
         if (!item->m_flipped) 
         {
-            m_ss << " E";
+            m_ss << " E";  // NOTE: In donn version, is W
         }
         else
         {
-            m_ss << " W";
+            m_ss << " W";  // NOTE: In donn version, is E
         }
         if(item->m_ltype == LayoutItem::TYPE_BOND) m_ss << " + SOURCE DIST";
         m_ss << " ;\n";
