@@ -39,11 +39,17 @@ CSVWriter::~CSVWriter()
 
 void CSVWriter::writeToFile()
 {
-    m_def << "Back to Index,,,,,,,,,,,,,,,,,,,,,,\n";
-    m_def << ",Pin Assignment (R4252),,,,,,,,,,,,,,,,,,,,,\n";
-    m_def << ",,,,,,,,,,,,,,,,,,,,,,";
-    m_def << ",,,,,Pin Name,,,,,,,,,,,,,,,,,";
-    m_def << ",,Pin No.,Pin Assign,Symbol/Layout content,Original,I/O name,Note,,,,,,,,,,,,,,,";
+    m_def << "Back to Index,,,,,,,\n";
+    m_def << ",Pin Assignment (R4252),,,,,,,,\n";
+    m_def << ",Design Name,,,,,,\n";
+    m_def << ",,,,,,,,,,,,\n";
+    m_def << ",N goes left -> right\n";
+    m_def << ",S goes left -> right\n";
+    m_def << ",W goes down -> up\n";
+    m_def << ",E goes down -> up\n";
+    m_def << ",Pin nr do not match package pin nr!\n";
+    m_def << ",,,,,,,,,,,,\n";
+    m_def << ",Pin Location,Pin No.,Pin Assign,,Pin Label,Layout Cell Name,Note,,,,\n";
 
     m_def << m_ss.str();
 }

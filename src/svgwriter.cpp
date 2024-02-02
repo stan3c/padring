@@ -199,7 +199,7 @@ void SVGWriter::writeCell(const LayoutItem *item)
     std::complex<double> center = (ll + ur) / 2.0;
     if (item->m_ltype != LayoutItem::TYPE_FILLER)
     {
-        m_svg << "<text text-anchor=\"middle\" x=\"" << center.real() << "\" y=\"" << center.imag() << "\" class=\"small\">" << item->m_cellname << "</text>\n";
-        m_svg << "<text text-anchor=\"middle\" x=\"" << center.real() << "\" y=\"" << center.imag()+20 << "\" class=\"small\">" << item->m_instance << "</text>\n";
+        m_svg << "<text text-anchor=\"middle\" x=\"" << center.real() << "\" y=\"" << center.imag() << "\" font-size=\"2em\">" << item->m_cellname << "</text>\n";
+        m_svg << "<text text-anchor=\"middle\" x=\"" << center.real() << "\" y=\"" << center.imag()+30 << "\" font-size=\"2em\">" << item->m_instance << "</text>\n";
     }
 }
