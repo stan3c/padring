@@ -200,6 +200,10 @@ void SVGWriter::writeCell(const LayoutItem *item)
     if (item->m_ltype != LayoutItem::TYPE_FILLER)
     {
         m_svg << "<text text-anchor=\"middle\" x=\"" << center.real() << "\" y=\"" << center.imag() << "\" font-size=\"2em\">" << item->m_cellname << "</text>\n";
+<<<<<<< HEAD
         m_svg << "<text text-anchor=\"middle\" x=\"" << center.real() << "\" y=\"" << center.imag()+30 << "\" font-size=\"2em\">" << item->m_instance << "</text>\n";
+=======
+        m_svg << "<text text-anchor=\"middle\" x=\"" << center.real() << "\" y=\"" << center.imag()+20 << "\" font-size=\"2em\">" << item->m_instance << "</text>\n";
+>>>>>>> 5a94695d01bec3fdd5f419581f490a519e30f98e
     }
 }
